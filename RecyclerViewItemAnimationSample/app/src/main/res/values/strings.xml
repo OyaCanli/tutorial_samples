@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RecyclerViewItemAnimationSample</string>
+    <string name="cd_product_image">Product image</string>
+</resources>
