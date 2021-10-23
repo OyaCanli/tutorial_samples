@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewitemanimationsample.databinding.ItemProductBinding
 
-
-class ProductAdapter (
+class ProductAdapter(
     viewModel: ProductViewModel,
     private val productLikeListener: ProductLikeListener
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
@@ -23,12 +22,12 @@ class ProductAdapter (
 
     override fun getItemCount(): Int = productList.size
 
-    class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root){
+    class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentProduct: Product, position : Int, listener : ProductLikeListener){
+        fun bind(currentProduct: Product, position: Int, listener: ProductLikeListener) {
             binding.productName.text = currentProduct.productName
             binding.productImage.setImageResource(currentProduct.productImage)
-            binding.likeAnim.progress = if(currentProduct.isLiked) 1f else 0f
+            binding.likeAnim.progress = if (currentProduct.isLiked) 1f else 0f
             binding.likeAnim.setOnClickListener {
                 listener.onLikeClicked(position)
             }
@@ -37,14 +36,14 @@ class ProductAdapter (
         companion object {
             fun from(parent: ViewGroup): ProductViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding=  ItemProductBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemProductBinding.inflate(layoutInflater, parent, false)
                 return ProductViewHolder(binding)
             }
         }
     }
 
     interface ProductLikeListener {
-        fun onLikeClicked(position : Int)
+        fun onLikeClicked(position: Int)
     }
 
     private class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {

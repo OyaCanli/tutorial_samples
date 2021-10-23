@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 class ProductItemAnimator : DefaultItemAnimator() {
 
     override fun canReuseUpdatedViewHolder(
-        viewHolder: RecyclerView.ViewHolder, payloads: MutableList<Any>
+        viewHolder: RecyclerView.ViewHolder,
+        payloads: MutableList<Any>
     ): Boolean = true
 
     override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder) = true
@@ -31,22 +32,23 @@ class ProductItemAnimator : DefaultItemAnimator() {
         return super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
     }
 
-
     override fun animateChange(
-        oldHolder: RecyclerView.ViewHolder, newHolder: RecyclerView.ViewHolder,
-        preInfo: ItemHolderInfo, postInfo: ItemHolderInfo
+        oldHolder: RecyclerView.ViewHolder,
+        newHolder: RecyclerView.ViewHolder,
+        preInfo: ItemHolderInfo,
+        postInfo: ItemHolderInfo
     ): Boolean {
 
         val holder = newHolder as ProductAdapter.ProductViewHolder
 
-        if(preInfo is ProductItemHolderInfo){
-            if(preInfo.wasLiked){
+        if (preInfo is ProductItemHolderInfo) {
+            if (preInfo.wasLiked) {
                 // It was previously liked. Unlike it
                 holder.binding.likeAnim.progress = 0f
             } else {
                 // It wasn't previously liked. Start like animation
                 holder.binding.likeAnim.apply {
-                    addAnimatorListener(object : Animator.AnimatorListener{
+                    addAnimatorListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(animation: Animator?) {}
                         override fun onAnimationRepeat(animation: Animator?) {}
                         override fun onAnimationCancel(animation: Animator?) {}
@@ -54,7 +56,6 @@ class ProductItemAnimator : DefaultItemAnimator() {
                         override fun onAnimationEnd(animation: Animator?) {
                             dispatchAnimationFinished(holder)
                         }
-
                     })
                     playAnimation()
                 }

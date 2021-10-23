@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(), ProductAdapter.ProductLikeListener {
 
     private var productAdapter: ProductAdapter? = null
 
-    private val viewModel : ProductViewModel by viewModels()
+    private val viewModel: ProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), ProductAdapter.ProductLikeListener {
             this, LinearLayoutManager.VERTICAL
         )
 
-       binding.productsList.apply {
+        binding.productsList.apply {
             addItemDecoration(dividerItemDecoration)
             itemAnimator = ProductItemAnimator()
             adapter = productAdapter
@@ -36,12 +36,11 @@ class MainActivity : AppCompatActivity(), ProductAdapter.ProductLikeListener {
     }
 
     override fun onLikeClicked(position: Int) {
-        //Shuffle like-dislike
+        // Shuffle like-dislike
         viewModel.productList[position].isLiked = !(viewModel.productList[position].isLiked)
-        //You would probably persist this info in a real life case.
+        // You would probably persist this info in a real life case.
 
-        //Notify adapter of what has changed
+        // Notify adapter of what has changed
         productAdapter?.notifyItemChanged(position, HEART_ANIM)
     }
-
 }
