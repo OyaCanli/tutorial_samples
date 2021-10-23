@@ -8,12 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerviewitemanimationsample.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-const val HEART_ANIM = 6728
-
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), ProductAdapter.ProductLikeListener {
+class MainActivity : AppCompatActivity() {
 
-    private var productAdapter: ProductAdapter? = null
+    private lateinit var productAdapter: ProductAdapter
 
     private val viewModel: ProductViewModel by viewModels()
 
@@ -22,7 +20,9 @@ class MainActivity : AppCompatActivity(), ProductAdapter.ProductLikeListener {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        productAdapter = ProductAdapter(viewModel, this)
+        productAdapter = ProductAdapter(onProductLiked = { position ->
+            viewModel.toggleLikeAtPosition(position)
+        })
 
         val dividerItemDecoration = DividerItemDecoration(
             this, LinearLayoutManager.VERTICAL
@@ -33,14 +33,9 @@ class MainActivity : AppCompatActivity(), ProductAdapter.ProductLikeListener {
             itemAnimator = ProductItemAnimator()
             adapter = productAdapter
         }
-    }
 
-    override fun onLikeClicked(position: Int) {
-        // Shuffle like-dislike
-        viewModel.productList[position].isLiked = !(viewModel.productList[position].isLiked)
-        // You would probably persist this info in a real life case.
-
-        // Notify adapter of what has changed
-        productAdapter?.notifyItemChanged(position, HEART_ANIM)
+        viewModel.productList.observe(this, {
+            productAdapter.submitList(it)
+        })
     }
 }

@@ -8,28 +8,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewitemanimationsample.databinding.ItemProductBinding
 
 class ProductAdapter(
-    viewModel: ProductViewModel,
-    private val productLikeListener: ProductLikeListener
+    private val onProductLiked: (Int) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
-
-    private val productList = viewModel.productList.also {
-        submitList(it)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder = ProductViewHolder.from(parent)
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) = holder.bind(productList[position], position, productLikeListener)
-
-    override fun getItemCount(): Int = productList.size
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) = holder.bind(getItem(position), position, onProductLiked)
 
     class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentProduct: Product, position: Int, listener: ProductLikeListener) {
+        fun bind(currentProduct: Product, position: Int, onProductLiked : (Int) -> Unit) {
             binding.productName.text = currentProduct.productName
             binding.productImage.setImageResource(currentProduct.productImage)
             binding.likeAnim.progress = if (currentProduct.isLiked) 1f else 0f
             binding.likeAnim.setOnClickListener {
-                listener.onLikeClicked(position)
+                onProductLiked(position)
             }
         }
 
@@ -42,18 +35,22 @@ class ProductAdapter(
         }
     }
 
-    interface ProductLikeListener {
-        fun onLikeClicked(position: Int)
-    }
-
     private class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
 
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem === newItem
+            return oldItem.productName == newItem.productName
         }
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
+        }
+
+        override fun getChangePayload(oldItem: Product, newItem: Product): Any? {
+            return when {
+                !oldItem.isLiked && newItem.isLiked -> LIKE_ITEM
+                oldItem.isLiked && !newItem.isLiked -> DISLIKE_ITEM
+                else -> null
+            }
         }
     }
 }

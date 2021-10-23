@@ -4,6 +4,9 @@ import android.animation.Animator
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 
+const val LIKE_ITEM = 6728
+const val DISLIKE_ITEM = 1672
+
 class ProductItemAnimator : DefaultItemAnimator() {
 
     override fun canReuseUpdatedViewHolder(
@@ -22,10 +25,10 @@ class ProductItemAnimator : DefaultItemAnimator() {
 
         if (changeFlags == FLAG_CHANGED) {
             for (payload in payloads) {
-                if (payload as? Int == HEART_ANIM) {
-                    val progress = (viewHolder as ProductAdapter.ProductViewHolder).binding.likeAnim.progress
-                    val liked = progress != 0f
-                    return ProductItemHolderInfo(liked)
+                return when (payload as? Int) {
+                    LIKE_ITEM -> ProductItemHolderInfo(true)
+                    DISLIKE_ITEM -> ProductItemHolderInfo(false)
+                    else -> super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
                 }
             }
         }
@@ -42,11 +45,8 @@ class ProductItemAnimator : DefaultItemAnimator() {
         val holder = newHolder as ProductAdapter.ProductViewHolder
 
         if (preInfo is ProductItemHolderInfo) {
-            if (preInfo.wasLiked) {
-                // It was previously liked. Unlike it
-                holder.binding.likeAnim.progress = 0f
-            } else {
-                // It wasn't previously liked. Start like animation
+            if (preInfo.likeItem) {
+                // Animate like
                 holder.binding.likeAnim.apply {
                     addAnimatorListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(animation: Animator?) {}
@@ -59,6 +59,9 @@ class ProductItemAnimator : DefaultItemAnimator() {
                     })
                     playAnimation()
                 }
+            } else {
+                // Dislike (You could possibly have a reverse animation here)
+                holder.binding.likeAnim.progress = 0f
             }
             return true
         }
@@ -66,5 +69,5 @@ class ProductItemAnimator : DefaultItemAnimator() {
         return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
     }
 
-    class ProductItemHolderInfo(val wasLiked: Boolean) : ItemHolderInfo()
+    class ProductItemHolderInfo(val likeItem: Boolean) : ItemHolderInfo()
 }
