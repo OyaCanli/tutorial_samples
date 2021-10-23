@@ -17,7 +17,7 @@ class ProductAdapter(
 
     class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentProduct: Product, position: Int, onProductLiked : (Int) -> Unit) {
+        fun bind(currentProduct: Product, position: Int, onProductLiked: (Int) -> Unit) {
             binding.productName.text = currentProduct.productName
             binding.productImage.setImageResource(currentProduct.productImage)
             binding.likeAnim.progress = if (currentProduct.isLiked) 1f else 0f
@@ -45,6 +45,8 @@ class ProductAdapter(
             return oldItem == newItem
         }
 
+        /*If DiffUtil recognizes that there is a change with the previous two methods, 
+        it will trigger this method to get corresponding payload*/
         override fun getChangePayload(oldItem: Product, newItem: Product): Any? {
             return when {
                 !oldItem.isLiked && newItem.isLiked -> LIKE_ITEM

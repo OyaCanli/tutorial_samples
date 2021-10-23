@@ -16,6 +16,9 @@ class ProductViewModel @Inject constructor(
         get() = _productList
 
     fun toggleLikeAtPosition(position: Int) {
+        // Toggle the like state of the item at position
+        // This is to simulate as if we were persisting and observing the data changes
+        // The copy operation here was needed to trigger DiffUtil
         val currentList = _productList.value!!.toMutableList()
         val wasPreviouslyLiked = currentList[position].isLiked
         currentList[position] = currentList[position].copy(isLiked = !wasPreviouslyLiked)

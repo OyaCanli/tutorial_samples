@@ -24,12 +24,10 @@ class ProductItemAnimator : DefaultItemAnimator() {
     ): ItemHolderInfo {
 
         if (changeFlags == FLAG_CHANGED) {
-            for (payload in payloads) {
-                return when (payload as? Int) {
-                    LIKE_ITEM -> ProductItemHolderInfo(true)
-                    DISLIKE_ITEM -> ProductItemHolderInfo(false)
-                    else -> super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
-                }
+            return when (payloads[0] as? Int) {
+                LIKE_ITEM -> ProductItemHolderInfo(true)
+                DISLIKE_ITEM -> ProductItemHolderInfo(false)
+                else -> super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
             }
         }
         return super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
