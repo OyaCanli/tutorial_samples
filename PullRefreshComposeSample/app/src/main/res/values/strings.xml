@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PullRefreshComposeSample</string>
+
+    // Pull to refresh
+    <string name="last_updated">Last update %s</string>
+    <string name="pull_to_refresh_pull_label">Pull down…</string>
+    <string name="pull_to_refresh_release_label">Release to refresh!</string>
+    <string name="pull_to_refresh_refreshing_label">Refreshing…</string>
+    <string name="pull_to_refresh_complete_label">Up-to-date!</string>
+    <string name="d_seconds_ago">%d seconds ago</string>
+    <string name="d_minutes_ago">%d minutes ago</string>
+    <string name="d_hours_ago">%1$d hours ago</string>
+
+</resources>
