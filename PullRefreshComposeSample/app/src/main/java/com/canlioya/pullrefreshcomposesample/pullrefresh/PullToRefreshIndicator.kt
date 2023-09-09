@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.canlioya.pullrefreshcomposesample.R
 import kotlin.math.roundToInt
 
+private const val maxHeight = 100
+
 @Composable
 fun PullToRefreshIndicator(
     indicatorState: RefreshIndicatorState,
@@ -28,16 +30,16 @@ fun PullToRefreshIndicator(
     timeElapsed: String,
 ) {
     val heightModifier = when (indicatorState) {
-        RefreshIndicatorState.PullingDown, RefreshIndicatorState.ReachedThreshold -> {
+        RefreshIndicatorState.PullingDown -> {
             Modifier.height(
                 (pullToRefreshProgress * 100)
                     .roundToInt()
-                    .coerceAtMost(100).dp,
+                    .coerceAtMost(maxHeight).dp,
             )
         }
-
+        RefreshIndicatorState.ReachedThreshold -> Modifier.height(maxHeight.dp)
         RefreshIndicatorState.Refreshing -> Modifier.wrapContentHeight()
-        else -> Modifier.height(0.dp)
+        RefreshIndicatorState.Default -> Modifier.height(0.dp)
     }
     Box(
         modifier = Modifier

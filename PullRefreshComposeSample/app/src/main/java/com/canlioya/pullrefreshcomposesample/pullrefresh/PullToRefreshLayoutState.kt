@@ -14,7 +14,7 @@ class PullToRefreshLayoutState(
     var refreshIndicatorState = mutableStateOf(RefreshIndicatorState.Default)
         private set
 
-    var lastRefreshText = mutableStateOf("0 seconden geleden")
+    var lastRefreshText = mutableStateOf("")
         private set
 
     fun updateRefreshState(refreshState: RefreshIndicatorState) {

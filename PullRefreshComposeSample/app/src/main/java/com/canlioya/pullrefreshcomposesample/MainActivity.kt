@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.canlioya.pullrefreshcomposesample.pullrefresh.PullToRefreshLayout
+import com.canlioya.pullrefreshcomposesample.pullrefresh.rememberPullToRefreshState
 import com.canlioya.pullrefreshcomposesample.ui.theme.PullRefreshComposeSampleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +36,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val pullToRefreshState = viewModel.pullToRefreshState
+            val pullToRefreshState = rememberPullToRefreshState(
+                onTimeUpdated = { timeElapsed ->
+                    viewModel.convertElapsedTimeIntoText(timeElapsed)
+                },
+            )
 
             val uiState by viewModel.uiState.collectAsState()
 
