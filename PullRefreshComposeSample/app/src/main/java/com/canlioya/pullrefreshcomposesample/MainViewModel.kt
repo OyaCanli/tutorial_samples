@@ -52,7 +52,10 @@ class MainViewModel @Inject constructor(
                         }
                     }
 
-                    is Result.Error -> UiState.Error
+                    is Result.Error -> {
+                        pullToRefreshState.updateRefreshState(RefreshIndicatorState.Default)
+                        UiState.Error
+                    }
                     is Result.Success -> {
                         if (loadType == UiState.LoadingType.PULL_REFRESH) {
                             pullToRefreshState.updateRefreshState(RefreshIndicatorState.Default)
