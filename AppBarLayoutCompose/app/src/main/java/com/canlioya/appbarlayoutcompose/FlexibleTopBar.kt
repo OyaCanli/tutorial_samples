@@ -167,6 +167,16 @@ private suspend fun settleAppBar(
     return Velocity(0f, remainingVelocity)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+suspend fun TopAppBarScrollBehavior.expandAnimating() {
+    AnimationState(
+        initialValue = this.state.heightOffset
+    )
+        .animateTo(
+            targetValue = 0f,
+            animationSpec = tween(durationMillis = 500)
+        ) { this@expandAnimating.state.heightOffset = value }
+}
 @Stable
 class FlexibleTopBarColors internal constructor(
     val containerColor: Color,
