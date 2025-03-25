@@ -9,6 +9,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.animateTo
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -101,13 +102,13 @@ fun FlexibleTopBar(
             content = content,
             modifier = modifier,
             measurePolicy = { measurables, constraints ->
-                val placeable = measurables.first().measure(constraints.copy(minWidth = 0))
-                heightOffsetLimit = placeable.height.toFloat() * -1
+                val placeable = measurables.firstOrNull()?.measure(constraints.copy(minWidth = 0))
+                heightOffsetLimit = (placeable?.height?.toFloat() ?: 0f) * -1
                 val scrollOffset = scrollBehavior?.state?.heightOffset ?: 0f
-                val height = placeable.height.toFloat() + scrollOffset
-                val layoutHeight = height.roundToInt()
+                val height = (placeable?.height?.toFloat() ?: 0f) + scrollOffset
+                val layoutHeight = height.roundToInt().coerceAtLeast(0)
                 layout(constraints.maxWidth, layoutHeight) {
-                    placeable.place(0, scrollOffset.toInt())
+                    placeable?.place(0, scrollOffset.toInt())
                 }
             }
         )
